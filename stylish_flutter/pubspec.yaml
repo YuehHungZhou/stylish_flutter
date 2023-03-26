@@ -62,6 +62,7 @@ flutter:
   assets:
   # assets-generator-begin
   # assets/img/*
+    - assets/img/ania.gif
     - assets/img/image_stylish.png
   # assets-generator-end
 

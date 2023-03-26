@@ -34,27 +34,85 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Image.asset(
-          'assets/img/image_stylish.png',
-          fit: BoxFit.fill,
-          width: 250,
-          height: 40,
+        appBar: AppBar(
+          title: Image.asset(
+            R.assetsImgImageStylish,
+            fit: BoxFit.fill,
+            width: 250,
+            height: 40,
+          ),
+          toolbarHeight: 80,
+          backgroundColor: Color(0xF1F4F8FF),
         ),
-        toolbarHeight: 80,
-        backgroundColor: Color(0xF1F4F8FF),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
+        body: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            SizedBox(
+              height: 200,
+              child: _horizontalList(8),
             ),
-            Image.asset('assets/img/image_stylish.png'),
+            Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  _verticalList(8),
+                ])
           ],
-        ),
-      ),
+        ));
+  }
+}
+
+ListView _horizontalList(int n) {
+  return ListView(
+    scrollDirection: Axis.horizontal,
+    children: List.generate(
+      n,
+      (i) => Container(
+          padding: const EdgeInsets.all(16),
+          height: 200,
+          alignment: Alignment.center,
+          child: Image.asset(
+            R.assetsImgAnia,
+            fit: BoxFit.fitHeight,
+          )),
+    ),
+  );
+}
+
+ListView _verticalList(int n) {
+  return ListView(
+    scrollDirection: Axis.vertical,
+    children: List.generate(
+      n,
+      (i) => Container(
+          padding: const EdgeInsets.all(16),
+          alignment: Alignment.center,
+          child: Image.asset(
+            R.assetsImgAnia,
+          )),
+    ),
+  );
+}
+
+class BannerImageView extends StatelessWidget {
+  const BannerImageView({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+      scrollDirection: Axis.horizontal,
+      itemBuilder: (BuildContext context, int index) {
+        return Container(
+          padding: EdgeInsets.symmetric(horizontal: 8),
+          child: Image.asset(
+            R.assetsImgAnia,
+            fit: BoxFit.fill,
+            width: 250,
+            height: 100,
+          ),
+        );
+      },
     );
   }
 }
