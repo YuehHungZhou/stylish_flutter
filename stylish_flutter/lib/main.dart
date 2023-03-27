@@ -54,26 +54,31 @@ class _MyHomePageState extends State<MyHomePage> {
                 height: 200,
                 child: _horizontalList(8),
               ),
-              Row(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Container(
-                      color: Colors.blue,
-                      width: 300,
-                      child: _verticalList(8),
+              Expanded(
+                child: Container(
+                  color: Colors.blue,
+                  child: Row(children: [
+                    Expanded(
+                      child: Container(
+                        color: Colors.blue,
+                        width: 300,
+                        child: _verticalList(8),
+                      ),
                     ),
-                    Container(
-                      color: Colors.white,
-                      width: 300,
-                      child: _verticalList(8),
-                    ),
-                    Container(
-                      color: Colors.green,
-                      width: 300,
-                      child: _verticalList(8),
-                    ),
-                  ])
+
+                    // Container(
+                    //   color: Colors.white,
+                    //   width: 300,
+                    //   child: _verticalList(8),
+                    // ),
+                    // Container(
+                    //   color: Colors.green,
+                    //   width: 300,
+                    //   child: _verticalList(8),
+                    // ),
+                  ]),
+                ),
+              )
             ],
           ),
         ));
@@ -97,42 +102,37 @@ ListView _horizontalList(int n) {
 }
 
 Column _verticalList(int n) {
-  return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Text("123123"),
-        Container(
-          height: 300,
-          child: ListView(
-            scrollDirection: Axis.vertical,
-            children: List.generate(
-              n,
-              (i) => Container(
-                  alignment: Alignment.topCenter,
-                  color: Colors.red,
-                  height: 100,
-                  child: Row(
-                    children: [
-                      SizedBox(
-                          width: 100,
-                          height: 100,
-                          child: Image.asset(R.assetsImgAnia,
-                              fit: BoxFit.fitHeight)),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Text('aaa'),
-                          Text('bbb'),
-                          Text('ccc')
-                        ],
-                      )
-                    ],
-                  )),
-            ),
+  return Column(mainAxisSize: MainAxisSize.max, children: [
+    Text("123123"),
+    Expanded(
+      child: Container(
+        height: 300,
+        child: ListView(
+          scrollDirection: Axis.vertical,
+          children: List.generate(
+            n,
+            (i) => Container(
+                alignment: Alignment.topCenter,
+                color: Colors.red,
+                height: 100,
+                child: Row(
+                  children: [
+                    SizedBox(
+                        width: 100,
+                        height: 100,
+                        child: Image.asset(R.assetsImgAnia,
+                            fit: BoxFit.fitHeight)),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[Text('aaa'), Text('bbb'), Text('ccc')],
+                    )
+                  ],
+                )),
           ),
         ),
-      ]);
+      ),
+    )
+  ]);
 }
 
 class BannerImageView extends StatelessWidget {
