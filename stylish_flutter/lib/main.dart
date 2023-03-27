@@ -44,21 +44,38 @@ class _MyHomePageState extends State<MyHomePage> {
           toolbarHeight: 80,
           backgroundColor: Color(0xF1F4F8FF),
         ),
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          mainAxisSize: MainAxisSize.max,
-          children: [
-            SizedBox(
-              height: 200,
-              child: _horizontalList(8),
-            ),
-            Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  _verticalList(8),
-                ])
-          ],
+        body: Container(
+          color: Colors.amber,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              SizedBox(
+                height: 200,
+                child: _horizontalList(8),
+              ),
+              Row(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Container(
+                      color: Colors.blue,
+                      width: 300,
+                      child: _verticalList(8),
+                    ),
+                    Container(
+                      color: Colors.white,
+                      width: 300,
+                      child: _verticalList(8),
+                    ),
+                    Container(
+                      color: Colors.green,
+                      width: 300,
+                      child: _verticalList(8),
+                    ),
+                  ])
+            ],
+          ),
         ));
   }
 }
@@ -70,7 +87,6 @@ ListView _horizontalList(int n) {
       n,
       (i) => Container(
           padding: const EdgeInsets.all(16),
-          height: 200,
           alignment: Alignment.center,
           child: Image.asset(
             R.assetsImgAnia,
@@ -80,19 +96,43 @@ ListView _horizontalList(int n) {
   );
 }
 
-ListView _verticalList(int n) {
-  return ListView(
-    scrollDirection: Axis.vertical,
-    children: List.generate(
-      n,
-      (i) => Container(
-          padding: const EdgeInsets.all(16),
-          alignment: Alignment.center,
-          child: Image.asset(
-            R.assetsImgAnia,
-          )),
-    ),
-  );
+Column _verticalList(int n) {
+  return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text("123123"),
+        Container(
+          height: 300,
+          child: ListView(
+            scrollDirection: Axis.vertical,
+            children: List.generate(
+              n,
+              (i) => Container(
+                  alignment: Alignment.topCenter,
+                  color: Colors.red,
+                  height: 100,
+                  child: Row(
+                    children: [
+                      SizedBox(
+                          width: 100,
+                          height: 100,
+                          child: Image.asset(R.assetsImgAnia,
+                              fit: BoxFit.fitHeight)),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Text('aaa'),
+                          Text('bbb'),
+                          Text('ccc')
+                        ],
+                      )
+                    ],
+                  )),
+            ),
+          ),
+        ),
+      ]);
 }
 
 class BannerImageView extends StatelessWidget {
