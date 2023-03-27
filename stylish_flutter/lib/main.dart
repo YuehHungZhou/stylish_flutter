@@ -62,7 +62,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       child: Container(
                         color: Colors.blue,
                         width: 300,
-                        child: _verticalList(8),
+                        child: _verticalList(3),
                       ),
                     ),
 
@@ -103,36 +103,58 @@ ListView _horizontalList(int n) {
 
 Column _verticalList(int n) {
   return Column(mainAxisSize: MainAxisSize.max, children: [
-    Text("123123"),
     Expanded(
-      child: Container(
-        height: 300,
-        child: ListView(
-          scrollDirection: Axis.vertical,
-          children: List.generate(
-            n,
-            (i) => Container(
-                alignment: Alignment.topCenter,
-                color: Colors.red,
-                height: 100,
-                child: Row(
-                  children: [
-                    SizedBox(
-                        width: 100,
-                        height: 100,
-                        child: Image.asset(R.assetsImgAnia,
-                            fit: BoxFit.fitHeight)),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[Text('aaa'), Text('bbb'), Text('ccc')],
-                    )
-                  ],
-                )),
-          ),
+      child: ListView(
+        scrollDirection: Axis.vertical,
+        children: List.generate(
+          n,
+          (i) => ProducrList(),
         ),
       ),
     )
   ]);
+}
+
+class ProducrList extends StatelessWidget {
+  const ProducrList({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Text("123123"),
+        for (var i = 0; i < 10; i++) Product(),
+      ],
+    );
+  }
+}
+
+class Product extends StatelessWidget {
+  const Product({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        alignment: Alignment.topCenter,
+        color: Colors.red,
+        height: 100,
+        child: Row(
+          children: [
+            SizedBox(
+                width: 100,
+                height: 100,
+                child: Image.asset(R.assetsImgAnia, fit: BoxFit.fitHeight)),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[Text('aaa'), Text('bbb'), Text('ccc')],
+            )
+          ],
+        ));
+  }
 }
 
 class BannerImageView extends StatelessWidget {
