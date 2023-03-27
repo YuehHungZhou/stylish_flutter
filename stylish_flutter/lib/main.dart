@@ -54,65 +54,49 @@ class _MyHomePageState extends State<MyHomePage> {
                 height: 200,
                 child: _horizontalList(8),
               ),
-              Expanded(
-                child: Container(
-                  color: Colors.blue,
-                  child: Row(children: [
-                    Expanded(
-                      child: Container(
-                        color: Colors.blue,
-                        width: 300,
-                        child: _verticalList(3),
-                      ),
-                    ),
-
-                    // Container(
-                    //   color: Colors.white,
-                    //   width: 300,
-                    //   child: _verticalList(8),
-                    // ),
-                    // Container(
-                    //   color: Colors.green,
-                    //   width: 300,
-                    //   child: _verticalList(8),
-                    // ),
-                  ]),
-                ),
-              )
+              ProductView()
             ],
           ),
         ));
   }
 }
 
-ListView _horizontalList(int n) {
-  return ListView(
-    scrollDirection: Axis.horizontal,
-    children: List.generate(
-      n,
-      (i) => Container(
-          padding: const EdgeInsets.all(16),
-          alignment: Alignment.center,
-          child: Image.asset(
-            R.assetsImgAnia,
-            fit: BoxFit.fitHeight,
-          )),
-    ),
-  );
+class ProductView extends StatelessWidget {
+  const ProductView({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    if (screenWidth > 900) {
+      return Expanded(
+        child: Container(
+          color: Colors.blue,
+          child: Row(children: [
+            _verticalList(1),
+            _verticalList(1),
+            _verticalList(1),
+          ]),
+        ),
+      );
+    } else {
+      // 螢幕寬度小於等於 900
+      return _verticalList(3);
+    }
+  }
 }
 
-Column _verticalList(int n) {
-  return Column(mainAxisSize: MainAxisSize.max, children: [
-    Expanded(
-      child: ListView(
-        scrollDirection: Axis.vertical,
-        children: List.generate(
-          n,
-          (i) => ProducrList(),
-        ),
+Expanded _verticalList(int n) {
+  return Expanded(
+    child: ListView(
+      scrollDirection: Axis.vertical,
+      children: List.generate(
+        n,
+        (i) => ProducrList(),
       ),
-    )
-  ]);
+    ),
+  );
 }
 
 class ProducrList extends StatelessWidget {
@@ -155,6 +139,22 @@ class Product extends StatelessWidget {
           ],
         ));
   }
+}
+
+ListView _horizontalList(int n) {
+  return ListView(
+    scrollDirection: Axis.horizontal,
+    children: List.generate(
+      n,
+      (i) => Container(
+          padding: const EdgeInsets.all(16),
+          alignment: Alignment.center,
+          child: Image.asset(
+            R.assetsImgAnia,
+            fit: BoxFit.fitHeight,
+          )),
+    ),
+  );
 }
 
 class BannerImageView extends StatelessWidget {
