@@ -21,6 +21,8 @@ class MyApp extends StatelessWidget {
   }
 }
 
+//////////////////////////// Product Page ////////////////////////////////
+
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
 
@@ -69,7 +71,7 @@ class ProductView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-    if (screenWidth > 900) {
+    if (screenWidth > 600) {
       return Expanded(
         child: Container(
           color: Colors.blue,
@@ -122,22 +124,33 @@ class Product extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        alignment: Alignment.topCenter,
-        color: Colors.red,
-        height: 100,
-        child: Row(
-          children: [
-            SizedBox(
-                width: 100,
-                height: 100,
-                child: Image.asset(R.assetsImgAnia, fit: BoxFit.fitHeight)),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[Text('aaa'), Text('bbb'), Text('ccc')],
-            )
-          ],
-        ));
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) =>
+                const DetailPage(title: 'Flutter Demo Detail Page'),
+          ),
+        );
+      },
+      child: Container(
+          alignment: Alignment.topCenter,
+          color: Colors.red,
+          height: 100,
+          child: Row(
+            children: [
+              SizedBox(
+                  width: 100,
+                  height: 100,
+                  child: Image.asset(R.assetsImgAnia, fit: BoxFit.fitHeight)),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[Text('aaa'), Text('bbb'), Text('ccc')],
+              )
+            ],
+          )),
+    );
   }
 }
 
@@ -176,5 +189,52 @@ class BannerImageView extends StatelessWidget {
         );
       },
     );
+  }
+}
+
+//////////////////////////// Detail Page ////////////////////////////////
+
+class DetailPage extends StatefulWidget {
+  const DetailPage({super.key, required this.title});
+
+  final String title;
+
+  @override
+  State<DetailPage> createState() => _DetailPageState();
+}
+
+class _DetailPageState extends State<DetailPage> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+          title: Image.asset(
+            R.assetsImgImageStylish,
+            fit: BoxFit.fill,
+            width: 250,
+            height: 40,
+          ),
+          toolbarHeight: 80,
+          backgroundColor: Color(0xF1F4F8FF),
+        ),
+        body: Container(
+          color: Colors.amber,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              SizedBox(
+                  width: 100,
+                  height: 100,
+                  child: Image.asset(R.assetsImgAnia, fit: BoxFit.fitHeight)),
+            ],
+          ),
+        ));
   }
 }
