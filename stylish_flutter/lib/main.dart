@@ -36,30 +36,31 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Image.asset(
-            R.assetsImgImageStylish,
-            fit: BoxFit.fill,
-            width: 250,
-            height: 40,
-          ),
-          toolbarHeight: 80,
-          backgroundColor: Color(0xF1F4F8FF),
+      appBar: AppBar(
+        title: Image.asset(
+          R.assetsImgImageStylish,
+          fit: BoxFit.fill,
+          width: 250,
+          height: 40,
         ),
-        body: Container(
-          color: Colors.amber,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              SizedBox(
-                height: 200,
-                child: _horizontalList(8),
-              ),
-              ProductView()
-            ],
-          ),
-        ));
+        toolbarHeight: 80,
+        backgroundColor: Color(0xF1F4F8FF),
+      ),
+      body: Container(
+        color: Colors.amber,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            SizedBox(
+              height: 200,
+              child: _horizontalList(8),
+            ),
+            ProductView()
+          ],
+        ),
+      ),
+    );
   }
 }
 
@@ -207,34 +208,185 @@ class _DetailPageState extends State<DetailPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
-          title: Image.asset(
-            R.assetsImgImageStylish,
-            fit: BoxFit.fill,
-            width: 250,
-            height: 40,
-          ),
-          toolbarHeight: 80,
-          backgroundColor: Color(0xF1F4F8FF),
+      appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pop(context);
+          },
         ),
-        body: Container(
-          color: Colors.amber,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              SizedBox(
-                  width: 100,
-                  height: 100,
-                  child: Image.asset(R.assetsImgAnia, fit: BoxFit.fitHeight)),
-            ],
-          ),
-        ));
+        title: Image.asset(
+          R.assetsImgImageStylish,
+          fit: BoxFit.fill,
+          width: 250,
+          height: 40,
+        ),
+        toolbarHeight: 80,
+        backgroundColor: Color(0xF1F4F8FF),
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Center(
+              child: Container(
+                width: 300,
+                height: 300,
+                color: Colors.blue,
+                child: Image.asset(R.assetsImgAnia, fit: BoxFit.fitHeight),
+              ),
+            ),
+            Center(
+              child: Container(
+                width: 300,
+                height: 300,
+                color: Colors.white,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Row(
+                      children: [Text('服飾的顏色'), ColorSelection()],
+                    ),
+                    Row(
+                      children: [
+                        Text('服飾的尺寸'),
+                        ElevatedButton(
+                          onPressed: () {},
+                          child: Text('S'),
+                        ),
+                        ElevatedButton(
+                          onPressed: () {},
+                          child: Text('M'),
+                        ),
+                        ElevatedButton(
+                          onPressed: () {},
+                          child: Text('L'),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      children: [Text('加入購物車'), QuantitySelector()],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Column(
+              children: [
+                Container(
+                  height: 300,
+                  color: Colors.red,
+                  child: Center(
+                    child: Text('C1'),
+                  ),
+                ),
+                Container(
+                  height: 300,
+                  color: Colors.red,
+                  child: Center(
+                    child: Text('C2'),
+                  ),
+                ),
+                Container(
+                  height: 300,
+                  color: Colors.red,
+                  child: Center(
+                    child: Text('C3'),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class ColorSelection extends StatefulWidget {
+  @override
+  _ColorSelectionState createState() => _ColorSelectionState();
+}
+
+class _ColorSelectionState extends State<ColorSelection> {
+  Color _selectedColor = Colors.red; // 追蹤選中的顏色
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        _buildColorSelection(Colors.red),
+        _buildColorSelection(Colors.blue),
+        _buildColorSelection(Colors.green),
+      ],
+    );
+  }
+
+  Widget _buildColorSelection(Color color) {
+    final bool isSelected = color == _selectedColor;
+
+    return InkWell(
+      onTap: () {
+        setState(() {
+          _selectedColor = color; // 更新選中的顏色
+        });
+      },
+      child: Container(
+        width: 50,
+        height: 50,
+        decoration: BoxDecoration(
+          color: color,
+          border: isSelected
+              ? Border.all(
+                  color: Colors.black,
+                  width: 3.0,
+                )
+              : null,
+        ),
+      ),
+    );
+  }
+}
+
+class QuantitySelector extends StatefulWidget {
+  @override
+  _QuantitySelectorState createState() => _QuantitySelectorState();
+}
+
+class _QuantitySelectorState extends State<QuantitySelector> {
+  int _quantity = 1;
+
+  void _incrementQuantity() {
+    setState(() {
+      if (_quantity < 100) {
+        _quantity++;
+      }
+    });
+  }
+
+  void _decrementQuantity() {
+    setState(() {
+      if (_quantity > 1) {
+        _quantity--;
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        IconButton(
+          icon: Icon(Icons.remove),
+          onPressed: _decrementQuantity,
+        ),
+        Text('$_quantity'),
+        IconButton(
+          icon: Icon(Icons.add),
+          onPressed: _incrementQuantity,
+        ),
+      ],
+    );
   }
 }
