@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'r.dart';
 
+import 'color_provider.dart';
+
 void main() {
-  runApp(const MyApp());
+  runApp(ChangeNotifierProvider(
+      create: (context) => ColorProvider(), child: const MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -309,8 +313,6 @@ class ColorSelection extends StatefulWidget {
 }
 
 class _ColorSelectionState extends State<ColorSelection> {
-  Color _selectedColor = Colors.red; // 追蹤選中的顏色
-
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -323,27 +325,31 @@ class _ColorSelectionState extends State<ColorSelection> {
   }
 
   Widget _buildColorSelection(Color color) {
-    final bool isSelected = color == _selectedColor;
+    return Consumer<ColorProvider>(
+      builder: (context, colorProvider, child) {
+        final bool isSelected = color == colorProvider.color;
 
-    return InkWell(
-      onTap: () {
-        setState(() {
-          _selectedColor = color; // 更新選中的顏色
-        });
+        return InkWell(
+          onTap: () {
+            setState(() {
+              colorProvider.changeColor(color); // 更新選中的顏色
+            });
+          },
+          child: Container(
+            width: 50,
+            height: 50,
+            decoration: BoxDecoration(
+              color: color,
+              border: isSelected
+                  ? Border.all(
+                      color: Colors.black,
+                      width: 3.0,
+                    )
+                  : null,
+            ),
+          ),
+        );
       },
-      child: Container(
-        width: 50,
-        height: 50,
-        decoration: BoxDecoration(
-          color: color,
-          border: isSelected
-              ? Border.all(
-                  color: Colors.black,
-                  width: 3.0,
-                )
-              : null,
-        ),
-      ),
     );
   }
 }
