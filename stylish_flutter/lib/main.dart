@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:stylish_flutter/network/ApiServise.dart';
 import 'r.dart';
 
 import 'color_provider.dart';
@@ -130,14 +131,17 @@ class Product extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) =>
-                const DetailPage(title: 'Flutter Demo Detail Page'),
-          ),
-        );
+      onTap: () async {
+        // Navigator.push(
+        //   context,
+        //   MaterialPageRoute(
+        //     builder: (context) =>
+        //         const DetailPage(title: 'Flutter Demo Detail Page'),
+        //   ),
+        // );
+
+        final reponse = await ApiServise().getMenProducts();
+        print(reponse?.data[0].category);
       },
       child: Container(
           alignment: Alignment.topCenter,
