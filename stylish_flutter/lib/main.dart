@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:stylish_flutter/network/ApiServise.dart';
+import 'bloc/post_bloc_state.dart';
+import 'bloc/post_cubit.dart';
+import 'network/GetProductResponse.dart';
 import 'r.dart';
 
 import 'color_provider.dart';
@@ -16,12 +20,17 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<PostCubit>(
+          create: (BuildContext context) => PostCubit(),
+        ),
+      ],
+      child: MaterialApp(
+        title: 'Flutter Demo',
+        theme: ThemeData(),
+        home: const MyHomePage(title: 'Flutter Demo Home Page'),
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
 }
@@ -29,15 +38,21 @@ class MyApp extends StatelessWidget {
 //////////////////////////// Product Page ////////////////////////////////
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
   final String title;
+
+  const MyHomePage({super.key, required this.title});
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  @override
+  void initState() {
+    super.initState();
+    context.read<PostCubit>().fetchData();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,7 +64,6 @@ class _MyHomePageState extends State<MyHomePage> {
           height: 40,
         ),
         toolbarHeight: 80,
-        backgroundColor: Color(0xF1F4F8FF),
       ),
       body: Container(
         color: Colors.amber,
@@ -76,72 +90,83 @@ class ProductView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    if (screenWidth > 600) {
-      return Expanded(
-        child: Container(
-          color: Colors.blue,
-          child: Row(children: [
-            _verticalList(1),
-            _verticalList(1),
-            _verticalList(1),
-          ]),
-        ),
-      );
-    } else {
-      // 螢幕寬度小於等於 900
-      return _verticalList(3);
-    }
+    return BlocBuilder<PostCubit, IPostState>(
+      builder: (_, state) {
+        if (state is PostSuccess) {
+          final screenWidth = MediaQuery.of(context).size.width;
+          if (screenWidth > 600) {
+            return Expanded(
+              child: Container(
+                color: Colors.white,
+                child: Row(children: [
+                  _verticalList([state.postList[0]]),
+                  _verticalList([state.postList[1]]),
+                  _verticalList([state.postList[2]]),
+                ]),
+              ),
+            );
+          } else {
+            // 螢幕寬度小於等於 900
+            return _verticalList(state.postList);
+          }
+        }
+        return Center(child: CircularProgressIndicator());
+      },
+    );
   }
 }
 
-Expanded _verticalList(int n) {
+Expanded _verticalList(List<GetProductResponse> listData) {
   return Expanded(
     child: ListView(
       scrollDirection: Axis.vertical,
       children: List.generate(
-        n,
-        (i) => ProducrList(),
+        listData.length,
+        (i) => ProducrList(data: listData[i]),
       ),
     ),
   );
 }
 
 class ProducrList extends StatelessWidget {
+  final GetProductResponse data;
+
   const ProducrList({
     super.key,
+    required this.data,
   });
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Text("123123"),
-        for (var i = 0; i < 10; i++) Product(),
+        Text(data.data[0].category),
+        for (var i = 0; i < data.data.length; i++)
+          ProductWidget(product: data.data[i]),
       ],
     );
   }
 }
 
-class Product extends StatelessWidget {
-  const Product({
+class ProductWidget extends StatelessWidget {
+  final Product product;
+
+  const ProductWidget({
     super.key,
+    required this.product,
   });
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () async {
-        // Navigator.push(
-        //   context,
-        //   MaterialPageRoute(
-        //     builder: (context) =>
-        //         const DetailPage(title: 'Flutter Demo Detail Page'),
-        //   ),
-        // );
-
-        final reponse = await ApiServise().getMenProducts();
-        print(reponse?.data[0].category);
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) =>
+                const DetailPage(title: 'Flutter Demo Detail Page'),
+          ),
+        );
       },
       child: Container(
           alignment: Alignment.topCenter,
@@ -152,10 +177,14 @@ class Product extends StatelessWidget {
               SizedBox(
                   width: 100,
                   height: 100,
-                  child: Image.asset(R.assetsImgAnia, fit: BoxFit.fitHeight)),
+                  child:
+                      Image.network(product.mainImage, fit: BoxFit.fitHeight)),
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[Text('aaa'), Text('bbb'), Text('ccc')],
+                children: <Widget>[
+                  Text(product.title),
+                  Text("NT${product.price}")
+                ],
               )
             ],
           )),
@@ -230,7 +259,6 @@ class _DetailPageState extends State<DetailPage> {
           height: 40,
         ),
         toolbarHeight: 80,
-        backgroundColor: Color(0xF1F4F8FF),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -328,16 +356,14 @@ class _ColorSelectionState extends State<ColorSelection> {
     );
   }
 
-  Widget _buildColorSelection(Color color) {
+  Widget _buildColorSelection(MaterialColor color) {
     return Consumer<ColorProvider>(
       builder: (context, colorProvider, child) {
         final bool isSelected = color == colorProvider.color;
 
         return InkWell(
           onTap: () {
-            setState(() {
-              colorProvider.changeColor(color); // 更新選中的顏色
-            });
+            colorProvider.changeColor(color); // 更新選中的顏色
           },
           child: Container(
             width: 50,

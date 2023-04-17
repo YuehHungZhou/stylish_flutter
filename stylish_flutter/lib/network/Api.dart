@@ -10,10 +10,10 @@ class Api {
   factory Api() => _singleton;
 
   static Dio createDio() {
-    // var dio = Dio(BaseOptions(
-    //   baseUrl: 'https://api.appworks-school.tw/api/1.0',
-    // ));
+    var dio = Dio(BaseOptions(
+      baseUrl: 'https://api.appworks-school.tw/api/1.0',
+    ));
 
-    return Dio();
+    return dio;
   }
 }

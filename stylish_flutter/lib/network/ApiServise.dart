@@ -14,9 +14,7 @@ class ApiServise {
     var response;
 
     try {
-      response = await Api()
-          .dio
-          .get('https://api.appworks-school.tw/api/1.0/products/men');
+      response = await Api().dio.get('/products/men');
 
       print(response);
     } on DioError catch (e) {
@@ -57,6 +55,31 @@ class ApiServise {
 
     if (response != null) {
       return GetProductResponse.fromJson(response.data);
+    }
+    return null;
+  }
+
+  Future<List<GetProductResponse>?> getAllProducts() async {
+    var responses;
+
+    try {
+      responses = await Future.wait([
+        Api().dio.get('/products/men'),
+        Api().dio.get('/products/women'),
+        Api().dio.get('/products/accessories')
+      ]);
+      print(responses);
+    } on DioError catch (e) {
+      print(e.toString());
+    }
+
+    if (responses != null) {
+      final products = <GetProductResponse>[];
+      for (final response in responses) {
+        final productResponse = GetProductResponse.fromJson(response.data);
+        products.add(productResponse);
+      }
+      return products;
     }
     return null;
   }
