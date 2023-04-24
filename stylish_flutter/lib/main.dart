@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:stylish_flutter/network/ApiServise.dart';
@@ -47,6 +48,20 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  static const platform = MethodChannel('com.example.randomNumber');
+
+  Future<int> _generateRandomNumber() async {
+    try {
+      final randomNumber =
+          await platform.invokeMethod<int>('generateRandomNumber');
+      print('Random number generated on Android: $randomNumber');
+      return randomNumber ?? 0;
+    } on PlatformException catch (e) {
+      print('Failed to generate random number: ${e.message}');
+      return 0;
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -63,6 +78,14 @@ class _MyHomePageState extends State<MyHomePage> {
           width: 250,
           height: 40,
         ),
+        actions: [
+          IconButton(
+            onPressed: () async {
+              final randomNumber = await _generateRandomNumber();
+            },
+            icon: const Icon(Icons.refresh),
+          ),
+        ],
         toolbarHeight: 80,
       ),
       body: Container(
