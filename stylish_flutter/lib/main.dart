@@ -48,17 +48,14 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  static const platform = MethodChannel('com.example.randomNumber');
+  static const platform = MethodChannel('test_tappay');
 
-  Future<int> _generateRandomNumber() async {
+  Future<void> _inputCreditCard() async {
     try {
-      final randomNumber =
-          await platform.invokeMethod<int>('generateRandomNumber');
-      print('Random number generated on Android: $randomNumber');
-      return randomNumber ?? 0;
+      final result = await platform.invokeMethod('tappay');
+      print('$result');
     } on PlatformException catch (e) {
-      print('Failed to generate random number: ${e.message}');
-      return 0;
+      print('Failed: ${e.message}');
     }
   }
 
@@ -81,7 +78,7 @@ class _MyHomePageState extends State<MyHomePage> {
         actions: [
           IconButton(
             onPressed: () async {
-              final randomNumber = await _generateRandomNumber();
+              final inputCreditCard = await _inputCreditCard();
             },
             icon: const Icon(Icons.refresh),
           ),
