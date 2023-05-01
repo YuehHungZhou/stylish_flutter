@@ -9,6 +9,7 @@ import 'network/GetProductResponse.dart';
 import 'r.dart';
 
 import 'color_provider.dart';
+import 'widget/map_widget.dart';
 
 void main() {
   runApp(ChangeNotifierProvider(
@@ -80,7 +81,16 @@ class _MyHomePageState extends State<MyHomePage> {
             onPressed: () async {
               final inputCreditCard = await _inputCreditCard();
             },
-            icon: const Icon(Icons.refresh),
+            icon: const Icon(Icons.credit_card),
+          ),
+          IconButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const MapSample()),
+              );
+            },
+            icon: const Icon(Icons.map),
           ),
         ],
         toolbarHeight: 80,
