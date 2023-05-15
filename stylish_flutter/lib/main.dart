@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:stylish_flutter/network/ApiServise.dart';
+import 'package:stylish_flutter/widget/ar_sample_widget.dart';
 import 'bloc/post_bloc_state.dart';
 import 'bloc/post_cubit.dart';
 import 'network/GetProductResponse.dart';
@@ -87,7 +88,8 @@ class _MyHomePageState extends State<MyHomePage> {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const MapSample()),
+                // MaterialPageRoute(builder: (context) => const MapSample()),
+                MaterialPageRoute(builder: (context) => ArSample()),
               );
             },
             icon: const Icon(Icons.map),
